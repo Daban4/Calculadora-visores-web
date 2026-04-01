@@ -14,7 +14,7 @@ const DEFAULTS = {
             settings: { start: 10, end: 70, step: 5 }
         }
     },
-    currentProfileId: "p1"
+    currentProfileId: "Principal"
 };
 
 let state = JSON.parse(localStorage.getItem('visor_state')) || DEFAULTS;
