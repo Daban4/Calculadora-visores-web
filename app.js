@@ -17,10 +17,29 @@ const DEFAULTS = {
     currentProfileId: "Principal"
 };
 
-let state = JSON.parse(localStorage.getItem('visor_state')) || DEFAULTS;
+// Clonar objeto para evitar referencias
+const getDefaults = () => JSON.parse(JSON.stringify(DEFAULTS));
+
+let state;
+try {
+    const saved = localStorage.getItem('visor_state');
+    state = saved ? JSON.parse(saved) : getDefaults();
+    
+    // VALIDACIÓN DE SEGURIDAD: Si el perfil actual no existe, cogemos el primero
+    if (!state.profiles[state.currentProfileId]) {
+        state.currentProfileId = Object.keys(state.profiles)[0];
+    }
+} catch (e) {
+    console.error("Error cargando memoria, reseteando a defaults", e);
+    state = getDefaults();
+}
 
 function saveState() {
-    localStorage.setItem('visor_state', JSON.stringify(state));
+    try {
+        localStorage.setItem('visor_state', JSON.stringify(state));
+    } catch (e) {
+        console.warn("No se pudo guardar en localStorage (¿Modo Incógnito estricto?)");
+    }
 }
 
 // --- 2. MOTOR MATEMÁTICO (TRADUCCIÓN DE NUMPY) ---
