@@ -1,0 +1,165 @@
+/* --- DISEÑO TÁCTICO DEEP NAVY PARA CALCULADORA DE VISORES --- */
+
+:root {
+    --bg-dark: #04040c;
+    --card-bg: #090a14;
+    --input-bg: #0f101a;
+    --accent: #1280e0;
+    --accent-hover: #1a95ff;
+    --danger: #ff4b4b;
+    --text-main: #ffffff;
+    --text-muted: #8e91a1;
+    --border: #2d2f3f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    padding: 10px;
+    line-height: 1.4;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1, h2, h3 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* --- FORMULARIO DE PERFIL --- */
+.profile-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+select, input, select {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn-danger { background: var(--danger); }
+.btn-secondary { background: #2d2f3f; }
+
+/* --- TABLA DE DATOS DE TIRO (Diseño Compacto) --- */
+.data-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.data-row input {
+    flex: 1;
+    text-align: center;
+    padding: 8px 5px;
+}
+
+.btn-del {
+    width: 40px;
+    height: 38px;
+    padding: 0;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--danger);
+}
+
+/* --- TABLA DE RESULTADOS --- */
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: var(--card-bg);
+}
+
+.result-table th, .result-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.result-table th {
+    background: rgba(18, 128, 224, 0.1);
+    color: var(--accent);
+}
+
+/* --- UTILIDADES --- */
+.flex-group { display: flex; gap: 10px; }
+.hidden { display: none; }
+.mt-1 { margin-top: 10px; }
+.caption { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 5px; }
+
+/* --- AJUSTE DE RADIO BUTTONS --- */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.radio-group input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* OPTIMIZACIÓN PWA (Sin barra de direcciones) */
+@media screen and (display-mode: standalone) {
+    body { padding-top: env(safe-area-inset-top); }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Calculadora de Visores",
+  "short_name": "Visores",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#04040c",
+  "theme_color": "#1280e0",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

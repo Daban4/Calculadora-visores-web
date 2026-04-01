@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Calculadora de Visores</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Calculadora de Visores">
+    <meta name="application-name" content="Calculadora de Visores">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Calculadora Pro</h1>
+        </header>
+
+        <!-- SECCIÓN DE PERFILES -->
+        <section class="card">
+            <h3>📂 Perfil</h3>
+            <div class="profile-selection">
+                <select id="profileSelect"></select>
+                <div class="flex-group mt-1">
+                    <button class="btn" id="btnNewProfile" style="flex: 1;">+ Nuevo Perfil</button>
+                    <button class="btn btn-danger" id="btnDeleteProfile" title="Borrar perfil actual">🗑️</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ENTRADA DE DATOS (Calibración) -->
+        <section class="card">
+            <h3>1. Datos de Tiro</h3>
+            <p class="caption">Introduce tus datos de calibración real:</p>
+            <div style="display: flex; gap: 5px; margin-bottom: 10px; font-weight: bold; color: var(--accent);">
+                <div style="flex: 1; text-align: center;">Distancia (m)</div>
+                <div style="flex: 1; text-align: center;">Visor (Clics)</div>
+                <div style="width: 40px;"></div>
+            </div>
+            <div id="dataRowsContainer">
+                <!-- Se rellena dinámicamente -->
+            </div>
+            <div class="flex-group mt-1">
+                <button class="btn" id="btnAddRow" style="flex: 1;">➕ Añadir Fila</button>
+                <button class="btn btn-secondary" id="btnSortData">🔄 Ordenar</button>
+            </div>
+        </section>
+
+        <!-- AJUSTES DE CÁLCULO -->
+        <section class="card">
+            <h3>2. Ajustes de Tabla</h3>
+            <div class="flex-group">
+                <div style="flex: 1;">
+                    <label class="caption">Inicio (m)</label>
+                    <input type="number" id="inputStart" value="10" step="5">
+                </div>
+                <div style="flex: 1;">
+                    <label class="caption">Fin (m)</label>
+                    <input type="number" id="inputEnd" value="70" step="10">
+                </div>
+                <div style="flex: 1;">
+                    <label class="caption">Salto (m)</label>
+                    <input type="number" id="inputStep" value="5" step="1">
+                </div>
+            </div>
+            <div class="mt-1">
+                <label class="caption">Método de Cálculo:</label>
+                <div class="radio-group" id="calcMethodGroup">
+                    <label><input type="radio" name="calcMethod" value="Interpolación" checked> Interpolación</label>
+                    <label><input type="radio" name="calcMethod" value="Regresión"> Regresión</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTADOS -->
+        <section class="card">
+            <h3>3. Tabla de Resultados</h3>
+            <button class="btn" id="btnDownload" style="width: 100%; padding: 15px; margin-bottom: 15px;">📥 Descargar PNG</button>
+            <div style="overflow-x: auto;">
+                <table class="result-table" id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>Distancia (m)</th>
+                            <th>Altura (Visor)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Se rellena dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer style="text-align: center; color: var(--text-muted); padding: 20px;">
+            <p>Calculadora de Visores Pro v1.0</p>
+        </footer>
+    </div>
+
+    <!-- El Cerebro de la App -->
+    <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(err => {
+            console.log('SW registration failed: ', err);
+          });
+        });
+      }
+    </script>
+</body>
+</html>
