@@ -229,9 +229,19 @@ function calculateAndRender() {
             res = interpolate(d, dists, alts);
         }
 
+        // Lógica de coincidencia extra-segura para decimales
+        const isExactMatch = dists.some(v => Math.abs(v - d) < 0.01);
         const row = elements.resultTable.insertRow();
-        row.insertCell(0).textContent = d;
-        row.insertCell(1).textContent = res.toFixed(2);
+        const cellDist = row.insertCell(0);
+        const cellAlt = row.insertCell(1);
+        
+        cellDist.textContent = d;
+        cellAlt.textContent = res.toFixed(2);
+        
+        if (isExactMatch) {
+            cellDist.className = 'exact-match';
+            cellAlt.className = 'exact-match';
+        }
     }
 }
 
