@@ -1,4 +1,4 @@
-const CACHE_NAME = 'visor-cache-v5';
+const CACHE_NAME = 'visor-cache-v6';
 const urlsToCache = [
   './index.html',
   './style.css',
@@ -9,7 +9,7 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-  self.skipWaiting(); // Forzar la activación inmediata
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
@@ -30,9 +30,23 @@ self.addEventListener('activate', event => {
   );
 });
 
+// ESTRATEGIA: RED PRIMERO, LUEGO CACHÉ (Para archivos críticos)
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
+  const isCritical = urlsToCache.some(url => event.request.url.includes(url.replace('./', '')));
+  
+  if (isCritical) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => response || fetch(event.request))
+    );
+  }
 });
