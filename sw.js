@@ -1,10 +1,11 @@
-const CACHE_NAME = 'visor-cache-v2';
+const CACHE_NAME = 'visor-cache-v4';
 const urlsToCache = [
   './index.html',
   './style.css',
   './app.js',
   './icon.png',
-  './manifest.json'
+  './manifest.json',
+  './github_logo.png'
 ];
 
 self.addEventListener('install', event => {
