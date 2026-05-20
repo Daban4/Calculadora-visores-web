@@ -81,7 +81,10 @@
         <!-- RESULTADOS -->
         <section class="card">
             <h3>3. Tabla de Resultados</h3>
-            <button class="btn" id="btnDownload" style="width: 100%; padding: 15px; margin-bottom: 15px;">📥 Descargar PNG</button>
+            <div class="flex-group" style="margin-bottom: 15px;">
+                <button class="btn" id="btnDownload" style="flex: 1; padding: 12px;">📸 Descargar PNG</button>
+                <button class="btn btn-share" id="btnShareLink" style="flex: 1; padding: 12px;">🔗 Compartir Enlace</button>
+            </div>
             <div style="overflow-x: auto;">
                 <table class="result-table" id="resultTable">
                     <thead>

@@ -5,7 +5,7 @@
     --card-bg: #090a14;
     --input-bg: #0f101a;
     --accent: #1280e0;
-    --accent-hover: #1a95ff;
+    --accent-hover: #1280e0;
     --danger: #ff4b4b;
     --text-main: #ffffff;
     --text-muted: #8e91a1;
@@ -168,4 +168,12 @@ select, input, select {
 /* OPTIMIZACIÓN PWA (Sin barra de direcciones) */
 @media screen and (display-mode: standalone) {
     body { padding-top: env(safe-area-inset-top); }
+}
+
+/* --- BOTÓN DE COMPARTIR --- */
+.btn-share {
+    background: var(--accent);
+}
+.btn-share:hover {
+    background: var(--accent-hover);
 }

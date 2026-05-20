@@ -34,10 +34,87 @@ try {
     state = getDefaults();
 }
 
+try { loadFromQueryParams(); } catch(e) { console.error(e); }
+
+
+
+// Cargar desde los Query Params si existen
+function loadFromQueryParams() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const distsParam = params.get('d');
+        const altsParam = params.get('a');
+        
+        if (distsParam && altsParam) {
+            const dists = distsParam.split(',').map(Number);
+            const alts = altsParam.split(',').map(Number);
+            
+            if (dists.length === alts.length && dists.length > 0) {
+                const profileName = params.get('p') || "Compartido";
+                
+                // Configuración
+                const settingsParam = params.get('s');
+                let settings = { start: 10, end: 70, step: 5 };
+                if (settingsParam) {
+                    const sParts = settingsParam.split(',').map(Number);
+                    if (sParts.length === 3) {
+                        settings = { start: sParts[0], end: sParts[1], step: sParts[2] };
+                    }
+                }
+                
+                // Método
+                const methodParam = params.get('m');
+                let method = "Interpolación";
+                if (methodParam === 'Regresión' || methodParam === 'Regresion') {
+                    method = 'Regresión';
+                } else if (methodParam === 'Interpolación' || methodParam === 'Interpolacion') {
+                    method = 'Interpolación';
+                }
+
+                // Generar los datos
+                const data = dists.map((d, idx) => ({ dist: d, alt: alts[idx] }));
+                
+                // Insertar/actualizar perfil en el estado
+                state.profiles[profileName] = {
+                    id: profileName,
+                    method: method,
+                    data: data,
+                    settings: settings
+                };
+                state.currentProfileId = profileName;
+                saveState(); // Guardamos en localStorage para persistirlo también localmente
+            }
+        }
+    } catch (e) {
+        console.error("Error parseando query params:", e);
+    }
+}
+
+
+function updateURL() {
+    try {
+        const profile = state.profiles[state.currentProfileId];
+        if (!profile) return;
+        
+        const params = new URLSearchParams();
+        params.set('p', state.currentProfileId);
+        params.set('d', profile.data.map(row => row.dist).join(','));
+        params.set('a', profile.data.map(row => row.alt).join(','));
+        params.set('s', `${profile.settings.start},${profile.settings.end},${profile.settings.step}`);
+        params.set('m', profile.method);
+        
+        const newURL = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + params.toString();
+        window.history.replaceState({ path: newURL }, '', newURL);
+    } catch (e) {
+        console.warn("No se pudo actualizar la URL:", e);
+    }
+}
+
 function saveState() {
     try {
         localStorage.setItem('visor_state', JSON.stringify(state));
-    } catch (e) {
+        try { updateURL(); } catch(e) {} 
+} catch (e) {
         console.warn("No se pudo guardar en localStorage (¿Modo Incógnito estricto?)");
     }
 }
@@ -127,7 +204,8 @@ const elements = {
     inputEnd: document.getElementById('inputEnd'),
     inputStep: document.getElementById('inputStep'),
     resultTable: document.getElementById('resultTable').getElementsByTagName('tbody')[0],
-    btnDownload: document.getElementById('btnDownload')
+    btnDownload: document.getElementById('btnDownload'),
+    btnShareLink: document.getElementById('btnShareLink')
 };
 
 function renderProfiles() {
@@ -362,6 +440,28 @@ elements.btnDownload.onclick = () => {
     link.href = canvas.toDataURL('image/png');
     link.click();
 };
+
+// --- COMPARTIR ENLACE ---
+if (elements.btnShareLink) {
+    elements.btnShareLink.onclick = () => {
+        try {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = elements.btnShareLink.innerHTML;
+                elements.btnShareLink.innerHTML = "¡Copiado! 📋";
+                elements.btnShareLink.style.background = "#22c55e"; // Feedback verde
+                setTimeout(() => {
+                    elements.btnShareLink.innerHTML = originalText;
+                    elements.btnShareLink.style.background = ""; // Restaura CSS
+                }, 2000);
+            });
+        } catch (err) {
+            alert("No se pudo copiar el enlace automáticamente. Cópialo de la barra de tu navegador.");
+        }
+    };
+}
+
+
 
 // --- INICIO ---
 renderProfiles();
